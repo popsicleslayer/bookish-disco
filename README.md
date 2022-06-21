@@ -1,2 +1,2 @@
 # bookish-disco
-Recipie API project
+Recipe API project
