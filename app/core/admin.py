@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from core import models
 
+
 class UserAdmin(BaseUserAdmin):
     """Define the admin pages for users"""
     ordering = ['id']
@@ -24,7 +25,8 @@ class UserAdmin(BaseUserAdmin):
                 )
             }
         ),
-        (_('Important dates'), {'fields': ('last_login',)}), #This comma after last_login IS important
+        (_('Important dates'), {'fields': ('last_login',)}),
+        # The comma after last_login IS important
     )
     readonly_fields = ['last_login']
     add_fieldsets = (
