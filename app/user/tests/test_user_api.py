@@ -2,7 +2,6 @@
 Tests for the user API
 """
 
-import email
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
@@ -102,4 +101,3 @@ class PublicUserAPITests(TestCase):
 
         self.assertNotIn('token', res.data)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-
