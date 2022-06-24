@@ -24,7 +24,7 @@ def create_recipe(user, **params):
         'title': 'Sample Recipe Title',
         'time_minutes': 30,
         'price': Decimal('44.99'),
-        'descripition': 'Random sample recipe descripition',
+        'description': 'Random sample recipe descripition',
         'link': 'http://www.samplerecipes.com/recipe.pdf'
     }
     defaults.update(params)
@@ -50,7 +50,7 @@ class PrivateRecipeAPITests(TestCase):
     """Test authenticated Recipe API requests"""
 
     def setUp(self):
-        self.client = APIClient
+        self.client = APIClient()
         self.user = get_user_model().objects.create_user(
             'user@example.com',
             'password123',
@@ -72,7 +72,7 @@ class PrivateRecipeAPITests(TestCase):
 
     def test_recipe_list_limited_to_user(self):
         """Test retrieving recipe list is limited to authenticated user"""
-        other_user = get_user_model.objects.create_user(
+        other_user = get_user_model().objects.create_user(
             'other_user@example.com',
             'otherpassword123',
         )
