@@ -3,6 +3,7 @@ Tests for Recipe API
 """
 
 from decimal import Decimal
+import re
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
@@ -40,6 +41,10 @@ def create_recipe(user, **params):
     recipe = Recipe.objects.create(user=user, **defaults)
     return recipe
 
+def create_user(**params):
+    """Create and return a new user"""
+    return get_user_model().objects.create_user(**params)
+
 
 class PublicRecipeAPITests(TestCase):
     """Test unauthenticated Recipe API requests"""
@@ -59,11 +64,7 @@ class PrivateRecipeAPITests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.user = get_user_model().objects.create_user(
-            'user@example.com',
-            'password123',
-        )
-
+        self.user = create_user(email='user@example.com', password='password123')
         self.client.force_authenticate(self.user)
 
     def test_retrieve_recipes(self):
@@ -80,10 +81,7 @@ class PrivateRecipeAPITests(TestCase):
 
     def test_recipe_list_limited_to_user(self):
         """Test retrieving recipe list is limited to authenticated user"""
-        other_user = get_user_model().objects.create_user(
-            'other_user@example.com',
-            'otherpassword123',
-        )
+        other_user = create_user(email='other_user@example.com', password='otherpassword123')
         create_recipe(user=other_user)
         create_recipe(user=self.user)
 
@@ -118,3 +116,5 @@ class PrivateRecipeAPITests(TestCase):
         for key, value in payload.items():
             self.assertEqual(getattr(recipe, key), value)
         self.assertEqual(recipe.user, self.user)
+
+
