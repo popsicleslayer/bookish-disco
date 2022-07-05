@@ -3,8 +3,6 @@ Tests for Recipe API
 """
 
 from decimal import Decimal
-import email
-import re
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
@@ -42,6 +40,7 @@ def create_recipe(user, **params):
     recipe = Recipe.objects.create(user=user, **defaults)
     return recipe
 
+
 def create_user(**params):
     """Create and return a new user"""
     return get_user_model().objects.create_user(**params)
@@ -65,7 +64,10 @@ class PrivateRecipeAPITests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.user = create_user(email='user@example.com', password='password123')
+        self.user = create_user(
+            email='user@example.com',
+            password='password123'
+        )
         self.client.force_authenticate(self.user)
 
     def test_retrieve_recipes(self):
@@ -82,7 +84,10 @@ class PrivateRecipeAPITests(TestCase):
 
     def test_recipe_list_limited_to_user(self):
         """Test retrieving recipe list is limited to authenticated user"""
-        other_user = create_user(email='other_user@example.com', password='otherpassword123')
+        other_user = create_user(
+            email='other_user@example.com',
+            password='otherpassword123'
+        )
         create_recipe(user=other_user)
         create_recipe(user=self.user)
 
@@ -127,7 +132,7 @@ class PrivateRecipeAPITests(TestCase):
             link=original_link,
         )
 
-        payload= {'title': 'New recipe title'}
+        payload = {'title': 'New recipe title'}
         url = detail_url(recipe.id)
         res = self.client.patch(url, payload)
 
@@ -140,16 +145,16 @@ class PrivateRecipeAPITests(TestCase):
     def test_full_update(self):
         """Test full update of a recipe"""
         recipe = create_recipe(
-            user= self.user,
+            user=self.user,
             title='Sample title',
             link='https://www.recipes.org/recipe.pdf',
             description='A sample descritpion of a recipe',
         )
 
         payload = {
-            'title':'New recipe title',
+            'title': 'New recipe title',
             'link': 'https://www.recipes.org/new_recipe.pdf',
-            'description':'New sample recipe description',
+            'description': 'New sample recipe description',
             'time_minutes': 10,
             'price': Decimal('4.55'),
         }
@@ -164,7 +169,10 @@ class PrivateRecipeAPITests(TestCase):
 
     def test_update_recipe_user_not_allowed(self):
         """Test changing the recipe user is not allowed"""
-        new_user = create_user(email='new_user@example.com', password='password123')
+        new_user = create_user(
+            email='new_user@example.com',
+            password='password123'
+        )
         recipe = create_recipe(user=self.user)
 
         payload = {'user': new_user.id}
@@ -186,7 +194,10 @@ class PrivateRecipeAPITests(TestCase):
 
     def test_recipe_other_user_recipe_delete_not_allowed(self):
         """Test trying to delete another users recipe is not allowed"""
-        new_user = create_user(email='new_user@example.com', password='password123')
+        new_user = create_user(
+            email='new_user@example.com',
+            password='password123'
+        )
         recipe = create_recipe(user=new_user)
 
         url = detail_url(recipe.id)
