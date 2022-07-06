@@ -21,6 +21,7 @@ def detail_url(tag_id):
     """Create and return a tag detail url"""
     return reverse('recipe:tag-detail', args=[tag_id])
 
+
 def create_user(email='tags_user@example.com', password='password123'):
     """Create and return a user"""
     return get_user_model().objects.create_user(email, password)
@@ -61,7 +62,10 @@ class PrivateTagsAPITests(TestCase):
 
     def test_retrieve_tags_limited_to_user(self):
         """Test retriving a list of tags limited to authenticated user."""
-        second_user = create_user(email='second_user@example.com', password='expassword123')
+        second_user = create_user(
+            email='second_user@example.com',
+            password='expassword123'
+        )
         Tag.objects.create(user=second_user, name='Tacos')
         tag = Tag.objects.create(user=self.user, name='Dinner')
 
