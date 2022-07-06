@@ -285,7 +285,7 @@ class PrivateRecipeAPITests(TestCase):
 
     def test_clear_recipe_tags(self):
         """Clearing recipe tags"""
-        tag =  Tag.objects.create(user=self.user, name='Juice')
+        tag = Tag.objects.create(user=self.user, name='Juice')
         recipe = create_recipe(user=self.user)
         recipe.tags.add(tag)
 
